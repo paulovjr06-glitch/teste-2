@@ -1,0 +1,25 @@
+-- ToggleHighlightsClient.lua
+-- LocalScript que detecta a tecla F e chama o RemoteEvent.
+-- Deve ser colocado em StarterPlayerScripts.
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local UserInputService = game:GetService("UserInputService")
+local Players = game:GetService("Players")
+
+local localPlayer = Players.LocalPlayer
+local remote = ReplicatedStorage:WaitForChild("ToggleHighlights")
+
+-- Alerta visual simples (opcional)
+local function notify(text)
+    -- Para manter simples, usa prints; você pode ligar um GUI para feedback.
+    print("[ToggleHighlights] " .. text)
+end
+
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+    if input.KeyCode == Enum.KeyCode.F then
+        -- pede ao servidor para alternar (o servidor decidirá se o jogador tem permissão)
+        remote:FireServer()
+        notify("Solicitado toggle de highlights (servidor avaliará permissão).")
+    end
+end)
